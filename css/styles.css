@@ -49,4 +49,7 @@ h1 {
   font-size: 1.5rem;
 }
 
-#description1
+iframe {
+  border: 1px solid black;
+  width: 100%; /* takes precedence over the width set with the HTML width attribute */
+}
