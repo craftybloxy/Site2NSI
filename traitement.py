@@ -1,35 +1,30 @@
-import pandas as pd
-laptop = pd.read_csv('./Data/Cleaned_Laptop_data.csv', encoding = 'utf-8')
+# Import the relevant libraries
+import numpy as np  # linear algebra
+import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
+import seaborn as sns
+import matplotlib.pyplot as plt
+import mpld3  # Import mpld3
 
-import plotly.graph_objs as go
-from plotly.offline import plot
-print(laptop)
-sorted_laptop = laptop.sort_values(by=['old_price'], ascending = True)
-x_data = sorted_laptop['old_price']
-y_data = sorted_laptop['latest_price']
+# Read the video games sales data
+video = pd.read_csv('./Data/Video_Games_Sales_as_at_22_Dec_2016.csv')
+# Filter the data for 7th generation consoles (Wii, PS3, X360)
+video7th = video[(video['Platform'] == 'Wii') | (video['Platform'] == 'PS3') | (video['Platform'] == 'X360')]
 
-# Create a trace
-trace = go.Scatter(
-    x=x_data,
-    y=y_data,
-    mode='lines+markers',
-    name='Example Graph'
-)
+# Set the dark background style for the plot
+plt.style.use('dark_background')
 
-# Create layout
-layout = go.Layout(
-    title='Example Graph',
-    xaxis=dict(title='X-axis Label'),
-    yaxis=dict(title='Y-axis Label')
-)
+# Group the data by Rating and Platform, and sum the global sales
+ratingSales = video7th.groupby(['Rating', 'Platform']).Global_Sales.sum()
 
-# Create figure object
-fig = go.Figure(data=[trace], layout=layout)
+# Create a stacked bar plot of sales per rating type for the 7th Gen Consoles
+fig, ax = plt.subplots(figsize=(13, 11))
+ratingSales.unstack().plot(kind='bar', stacked=True, colormap='Greens', grid=False, ax=ax)
+plt.title('Stacked Barplot of Sales per Rating type of the 7th Gen Consoles')
+plt.ylabel('Sales')
 
-# Generate HTML file
-plot(fig, filename='graph.html')
+# Convert the plot to HTML using mpld3
+html_output = mpld3.fig_to_html(fig)
 
-
-
-print(laptop['Price_euros'])
-
+# Save the HTML to a file
+with open('plot_output.html', 'w') as f:
+    f.write(html_output)
