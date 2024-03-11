@@ -30,3 +30,9 @@ with open('plot_output.html', 'w') as f:
     f.write(html_output)
 
 
+plt.style.use('dark_background')
+genreSales = video7th.groupby(['Genre','Platform']).Global_Sales.sum()
+genreSales.unstack().plot(kind='bar',stacked=True,  colormap= 'Reds', 
+                          grid=False, figsize=(13,11))
+plt.title('Stacked Barplot of Sales per Game Genre')
+plt.ylabel('Sales')
