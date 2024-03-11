@@ -28,3 +28,5 @@ html_output = mpld3.fig_to_html(fig)
 # Save the HTML to a file
 with open('plot_output.html', 'w') as f:
     f.write(html_output)
+
+
