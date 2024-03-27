@@ -34,9 +34,32 @@ summary_statistics = combined_sales.groupby('Platform')['Global_Sales'].describe
 print(summary_statistics)
 print()
 
-# Plot
+# Plot premier
 fig = px.line(combined_sales, x='Year_of_Release', y='Global_Sales', color='Platform',
-              title="Global Sales Comparison by Console Over Time")
+              title="Graphique des ventes par consoles")
 fig.update_xaxes(type='category')  # Use categorical x-axis
 fig.update_layout(xaxis_title='Year of Release', yaxis_title='Global Sales')
 fig.write_html("./html/global_sales_comparison.html")
+
+
+# Aggregate global sales for each game
+game_sales = df.groupby('Name')['Global_Sales'].sum().reset_index()
+
+# Sort the data by sales in descending order and take the top 10
+top_games = game_sales.sort_values(by='Global_Sales', ascending=False).head(20)
+
+# Plot second
+fig = px.bar(top_games, x='Name', y='Global_Sales', 
+             title="Les 20 jeux les plus vendu SUR 16000 JEUX", 
+             labels={'Global_Sales': 'Global Sales', 'Name': 'Game Name'})
+fig.write_html("./html/global_sales_game.html")
+
+
+# Fill NaN values in the 'Name' column with an empty string
+df['Name'] = df['Name'].fillna('')
+
+zelda_games = df[df['Name'].str.contains('Zelda')]
+
+fig = px.bar(zelda_games, x='Name', y='Global_Sales', 
+             title='Comparaison des ventes de jeux zelda')
+fig.write_html("./html/global_zelda_game.html")

@@ -40,8 +40,12 @@ nav a {
 }
 #content {
     margin-top:80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
-}
+
 main {
   padding: 20px;
 }
@@ -52,6 +56,6 @@ p {
   color: #666;
 }
 iframe {
-  width: 1300;
-  height: 1000;
+  width: 800;
+
 }
